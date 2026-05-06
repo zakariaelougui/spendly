@@ -111,4 +111,5 @@ expense-tracker/
 - **Validation** — [Zod](https://zod.dev) is used both for form validation in screens and for parsing API responses at runtime.
 - **Navigation** — [React Navigation](https://reactnavigation.org) with a native stack for auth screens and a bottom tab navigator for the main app.
 - **UI** — [React Native Paper](https://reactnativepaper.com) (Material Design 3).
+- **Dark mode** — three appearance options (Light, Dark, System) available in the Profile screen. The preference is persisted via `AsyncStorage` so it survives app restarts. `System` follows the device's color scheme automatically.
 - **API layer** — currently backed by mock data with simulated delays. To connect a real backend, update `src/api/client.ts` and replace the function bodies in `src/api/auth.ts` and `src/api/expenses.ts`.

@@ -1,5 +1,5 @@
 /**
- * ProfileScreen — displays user info and sign-out control.
+ * ProfileScreen — displays user info, appearance settings, and sign-out control.
  *
  * Shows a CTA card for guest users prompting them to create a real account.
  * Logout clears both auth state and the expenses store so the next user
@@ -7,17 +7,19 @@
  */
 import React, { useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Text, Button, Divider, useTheme, Card, Avatar } from 'react-native-paper';
+import { Text, Button, Divider, useTheme, Card, Avatar, SegmentedButtons } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuthStore } from '../store/authStore';
 import { useExpensesStore } from '../store/expensesStore';
+import { useThemeStore, ThemePreference } from '../store/themeStore';
 
 export default function ProfileScreen() {
   const theme = useTheme();
   const { user, logout } = useAuthStore();
   const resetExpenses = useExpensesStore(s => s.reset);
+  const { preference, setPreference } = useThemeStore();
   const [loggingOut, setLoggingOut] = useState(false);
 
   const isGuest = user?.id === 'guest';
@@ -113,6 +115,26 @@ export default function ProfileScreen() {
           </Card.Content>
         </Card>
       )}
+
+      <Card style={[styles.infoCard, { backgroundColor: theme.colors.surface }]} elevation={0}>
+        <View style={[styles.infoRow, { paddingBottom: 8 }]}>
+          <MaterialCommunityIcons name="palette-outline" size={20} color={theme.colors.onSurfaceVariant} />
+          <View style={styles.infoText}>
+            <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>Appearance</Text>
+          </View>
+        </View>
+        <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+          <SegmentedButtons
+            value={preference}
+            onValueChange={v => setPreference(v as ThemePreference)}
+            buttons={[
+              { value: 'light', label: 'Light', icon: 'weather-sunny' },
+              { value: 'system', label: 'System', icon: 'cellphone' },
+              { value: 'dark', label: 'Dark', icon: 'weather-night' },
+            ]}
+          />
+        </View>
+      </Card>
 
       <View style={styles.spacer} />
 
